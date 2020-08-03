@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/e_m_container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".navigation.EventFragment">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/e_m_recyclerview"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="40dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/e_m_main_title"
+        app:layout_constraintVertical_bias="0.5" />
+
+    <com.scwang.wave.MultiWaveHeader
+        android:id="@+id/e_main_actionBar"
+        android:layout_width="match_parent"
+        android:layout_height="170dp"
+        android:background="@android:color/transparent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:mwhCloseColor="@color/colorPrimary"
+        app:mwhColorAlpha="0.8"
+        app:mwhIsRunning="false"
+        app:mwhProgress="1"
+        app:mwhStartColor="@color/colorPrimary"
+        app:mwhVelocity="1"
+        app:mwhWaveHeight="60dp"
+        app:mwhWaves="MultiWave">
+
+    </com.scwang.wave.MultiWaveHeader>
+
+    <TextView
+        android:id="@+id/e_m_main_title"
+        style="@style/appHeaderStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/featured_events"
+        app:layout_constraintBottom_toBottomOf="@+id/e_main_actionBar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.3" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

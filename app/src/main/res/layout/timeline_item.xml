@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/timeline_card"
+        android:layout_width="290dp"
+        android:layout_height="140dp"
+        android:layout_marginStart="16dp"
+        app:cardBackgroundColor="@color/colorPrimaryPartial"
+        app:cardCornerRadius="10dp"
+        app:cardPreventCornerOverlap="true"
+        app:cardUseCompatPadding="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/t_item_watch_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:tint="@color/colorBackgroundWhite"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_watch_24" />
+
+            <TextView
+                android:id="@+id/t_item_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:fontFamily="sans-serif-medium"
+                android:text="4:30 PM"
+                android:textColor="@color/colorBackgroundWhite"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="@+id/t_item_watch_icon"
+                app:layout_constraintStart_toEndOf="@+id/t_item_watch_icon"
+                app:layout_constraintTop_toTopOf="@+id/t_item_watch_icon" />
+
+            <ImageView
+                android:id="@+id/t_item_venue_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="4dp"
+                android:tint="@color/colorBackgroundWhite"
+                app:layout_constraintBottom_toBottomOf="@+id/t_item_watch_icon"
+                app:layout_constraintEnd_toStartOf="@+id/t_item_venue"
+                app:layout_constraintTop_toTopOf="@+id/t_item_watch_icon"
+                app:srcCompat="@drawable/ic_venue_24" />
+
+            <TextView
+                android:id="@+id/t_item_venue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:fontFamily="sans-serif-medium"
+                android:text="D005"
+                android:textColor="@color/colorBackgroundWhite"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="@+id/t_item_venue_icon"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/t_item_venue_icon" />
+
+            <TextView
+                android:id="@+id/t_item_course_name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
+                android:text="CST04512 - Mobile App Basics"
+                android:textColor="@color/colorWhite"
+                app:layout_constraintBottom_toTopOf="@+id/t_item_active_text"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/t_item_watch_icon" />
+
+            <ImageView
+                android:id="@+id/t_item_active_icon"
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginBottom="16dp"
+                android:tint="@color/colorLightGreen"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:srcCompat="@drawable/ic_dot_24" />
+
+            <TextView
+                android:id="@+id/t_item_active_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:fontFamily="sans-serif-medium"
+                android:text="ONGOING LECTURE"
+                android:textColor="@color/colorBackgroundWhite"
+                android:textSize="10sp"
+                app:layout_constraintBottom_toBottomOf="@+id/t_item_active_icon"
+                app:layout_constraintStart_toEndOf="@+id/t_item_active_icon"
+                app:layout_constraintTop_toTopOf="@+id/t_item_active_icon" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+</androidx.constraintlayout.widget.ConstraintLayout>

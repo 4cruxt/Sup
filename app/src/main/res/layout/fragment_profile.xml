@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/p_main_container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".navigation.ProfileFragment">
+
+    <com.scwang.wave.MultiWaveHeader
+        android:id="@+id/p_main_actionBar"
+        android:layout_width="match_parent"
+        android:layout_height="170dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:mwhCloseColor="@color/colorPrimary"
+        app:mwhColorAlpha="0.8"
+        app:mwhIsRunning="true"
+        app:mwhProgress="1"
+        app:mwhStartColor="@color/colorPrimary"
+        app:mwhVelocity="1"
+        app:mwhWaveHeight="60dp"
+        app:mwhWaves="MultiWave">
+
+    </com.scwang.wave.MultiWaveHeader>
+
+    <ImageView
+        android:id="@+id/p_main_setting_button"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginTop="32dp"
+        app:layout_constraintBottom_toTopOf="@+id/p_main_title"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.9"
+        app:layout_constraintStart_toEndOf="@+id/p_main_title"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_baseline_settings_24" />
+
+    <TextView
+        android:id="@+id/p_main_title"
+        style="@style/appHeaderStyle"
+        android:text="@string/about_me"
+        app:layout_constraintBottom_toBottomOf="@+id/p_main_actionBar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/p_main_actionBar"
+        app:layout_constraintTop_toTopOf="@+id/p_main_actionBar"
+        app:layout_constraintVertical_bias="0.3" />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/p_main_card"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        app:cardBackgroundColor="@color/colorPrimaryDark"
+        app:cardCornerRadius="5dp"
+        app:cardPreventCornerOverlap="true"
+        app:cardUseCompatPadding="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/p_main_actionBar"
+        app:layout_constraintVertical_bias="0.4">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/p_main_card_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/p_m_c_reg_num"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:textColor="@color/colorWhite"
+                android:textSize="14sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <View
+                android:id="@+id/p_m_c_reg_num_divider"
+                android:layout_width="20dp"
+                android:layout_height="2dp"
+                android:layout_marginStart="2dp"
+                android:layout_marginTop="2dp"
+                android:background="@color/colorWhite"
+                app:layout_constraintStart_toStartOf="@+id/p_m_c_reg_num"
+                app:layout_constraintTop_toBottomOf="@+id/p_m_c_reg_num" />
+
+            <TextView
+                android:id="@+id/p_m_c_username"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:fontFamily="@font/aclonica"
+                android:text="Erick E. Mafole"
+                android:textColor="@color/colorWhite"
+                android:textSize="24sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/p_m_c_reg_num_divider" />
+
+            <TextView
+                android:id="@+id/p_m_c_course_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:fontFamily="casual"
+                android:textColor="@color/colorWhite"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <TextView
+                android:id="@+id/p_m_c_bio"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="16dp"
+                android:fontFamily="monospace"
+                android:lineSpacingExtra="8sp"
+                android:textColor="@color/colorWhite"
+                app:layout_constraintBottom_toTopOf="@+id/p_m_c_course_name"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/p_m_c_username" />
+
+            <ImageView
+                android:id="@+id/p_m_c_verified_badge"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginStart="1dp"
+                android:tint="@color/colorWhite"
+                android:visibility="invisible"
+                app:layout_constraintStart_toEndOf="@+id/p_m_c_username"
+                app:layout_constraintTop_toTopOf="@+id/p_m_c_username"
+                app:srcCompat="@drawable/ic_verified_24" />
+
+            <Button
+                android:id="@+id/p_m_c_edit_pro_button"
+                android:layout_width="100dp"
+                android:layout_height="40dp"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/button_selector"
+                android:text="@string/edit_profile"
+                android:textAllCaps="false"
+                android:textColor="@color/colorWhite"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toBottomOf="@+id/p_m_c_course_name"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

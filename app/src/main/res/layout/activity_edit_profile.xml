@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
+    tools:context=".EditProfileActivity">
+
+    <com.scwang.wave.MultiWaveHeader
+        android:id="@+id/edit_pro_main_actionBar"
+        android:layout_width="match_parent"
+        android:layout_height="170dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:mwhCloseColor="@color/colorPrimaryPartial"
+        app:mwhColorAlpha="0.8"
+        app:mwhIsRunning="false"
+        app:mwhProgress="1"
+        app:mwhStartColor="@color/colorPrimaryPartial"
+        app:mwhVelocity="1"
+        app:mwhWaveHeight="60dp"
+        app:mwhWaves="MultiWave">
+
+    </com.scwang.wave.MultiWaveHeader>
+
+    <ImageButton
+        android:id="@+id/edit_pro_save_button"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="32dp"
+        android:background="@android:color/transparent"
+        android:tint="@color/colorWhite"
+        app:layout_constraintBottom_toTopOf="@+id/edit_pro_main_title"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_save_24"
+        tools:ignore="ContentDescription" />
+
+    <TextView
+        android:id="@+id/edit_pro_main_title"
+        style="@style/appHeaderStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/edit_profile"
+        app:layout_constraintBottom_toBottomOf="@+id/edit_pro_main_actionBar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.24000001" />
+
+    <TextView
+        android:id="@+id/edit_pro_reg_text"
+        style="@style/textHeaderStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="40dp"
+        android:text="@string/registration_number"
+        android:textColor="@color/colorPrimaryPartial"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edit_pro_main_actionBar" />
+
+    <EditText
+        android:id="@+id/edit_pro_registration_number"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/colorPrimaryPartial"
+        android:ems="10"
+        android:fontFamily="sans-serif-condensed-medium"
+        android:inputType="number"
+        android:singleLine="true"
+        android:textColor="@color/colorWhite"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="@+id/edit_pro_reg_text"
+        app:layout_constraintTop_toBottomOf="@+id/edit_pro_reg_text"
+        tools:targetApi="lollipop" />
+
+    <TextView
+        android:id="@+id/edit_pro_username_text"
+        style="@style/textHeaderStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="32dp"
+        android:text="@string/username"
+        android:textColor="@color/colorPrimaryPartial"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edit_pro_registration_number" />
+
+    <EditText
+        android:id="@+id/edit_pro_username"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/colorPrimaryPartial"
+        android:ems="10"
+        android:fontFamily="sans-serif-condensed-medium"
+        android:inputType="textPersonName"
+        android:singleLine="true"
+        android:textColor="@color/colorWhite"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="@+id/edit_pro_username_text"
+        app:layout_constraintTop_toBottomOf="@+id/edit_pro_username_text"
+        tools:targetApi="lollipop" />
+
+    <TextView
+        android:id="@+id/edit_pro_course_text"
+        style="@style/textHeaderStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="32dp"
+        android:text="@string/course"
+        android:textColor="@color/colorPrimaryPartial"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edit_pro_username" />
+
+    <EditText
+        android:id="@+id/edit_pro_course"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/colorPrimaryPartial"
+        android:ems="10"
+        android:fontFamily="sans-serif-condensed-medium"
+        android:inputType="textPersonName"
+        android:singleLine="true"
+        android:textColor="@color/colorWhite"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="@+id/edit_pro_course_text"
+        app:layout_constraintTop_toBottomOf="@+id/edit_pro_course_text" />
+
+    <TextView
+        android:id="@+id/edit_pro_bio_text"
+        style="@style/textHeaderStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="32dp"
+        android:text="@string/bio"
+        android:textColor="@color/colorPrimaryPartial"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edit_pro_course" />
+
+    <EditText
+        android:id="@+id/edit_pro_bio"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/colorPrimaryPartial"
+        android:ems="10"
+        android:fontFamily="sans-serif-condensed-medium"
+        android:inputType="textMultiLine"
+        android:lineSpacingExtra="8sp"
+        android:singleLine="false"
+        android:textAlignment="textStart"
+        android:textColor="@color/colorWhite"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="@+id/edit_pro_bio_text"
+        app:layout_constraintTop_toBottomOf="@+id/edit_pro_bio_text" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

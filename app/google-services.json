@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "560098573247",
+    "firebase_url": "https://supp-3924e.firebaseio.com",
+    "project_id": "supp-3924e",
+    "storage_bucket": "supp-3924e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:560098573247:android:34216be64d4393455e7f0a",
+        "android_client_info": {
+          "package_name": "com.fole_Studios.sup"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "560098573247-q27j5pvmj586vsc10a3bsd608m57nu7p.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD21lEn7ba4sodsN2kYLsjFkvb_z8pezbU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "560098573247-q27j5pvmj586vsc10a3bsd608m57nu7p.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

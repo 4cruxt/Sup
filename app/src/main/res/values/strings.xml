@@ -1,0 +1,25 @@
+<resources>
+    <string name="app_name">Sup</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_events">Events</string>
+    <string name="title_profile">Profile</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="registration_number_placeholder">19100523140044</string>
+    <string name="edit_profile">Edit profile</string>
+    <string name="logout">Logout</string>
+    <string name="about_me">About Me</string>
+    <string name="featured_events">Featured Events</string>
+    <string name="exam">Exams</string>
+    <string name="module">Modules</string>
+    <string name="project">Projects</string>
+    <string name="today_s_timeline">TODAY\'S TIMELINE</string>
+    <string name="announcements">Announcements</string>
+    <string name="assignments">Assignments</string>
+    <string name="registration_number">Registration number</string>
+    <string name="username">Username</string>
+    <string name="course">Course</string>
+    <string name="bio">Bio</string>
+    <string name="bio_placeholder">I\'m a software engineer who is passionate about making open-source more accessible, creating technology to elevate people, and building community. Some technologies I enjoy working with include Game dev.(Unity engine), Animation dev.(iClone) and Mobile dev.(Android).</string>
+    <string name="course_placeholder">Computer Science</string>
+</resources>
