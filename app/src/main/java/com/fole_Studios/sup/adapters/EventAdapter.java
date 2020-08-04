@@ -12,7 +12,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.fole_Studios.sup.R;
-import com.fole_Studios.sup.glide.GlideApp;
+import com.fole_Studios.sup.custom.GlideApp;
 import com.fole_Studios.sup.models.EventFeatured;
 
 import java.util.ArrayList;

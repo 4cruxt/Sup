@@ -1,8 +1,12 @@
 package com.fole_Studios.sup.models;
 
+import com.google.firebase.firestore.ServerTimestamp;
+
 public class Announcement
 {
     private String _annType, _annText, _annTime;
+    @ServerTimestamp
+    private String _time;
 
     public Announcement(String annType, String annText, String annTime)
     {
@@ -14,6 +18,16 @@ public class Announcement
     public String getAnnType()
     {
         return _annType;
+    }
+
+    public String getTime()
+    {
+        return _time;
+    }
+
+    public void setTime(String time)
+    {
+        _time = time;
     }
 
     public void setAnnType(String annType)

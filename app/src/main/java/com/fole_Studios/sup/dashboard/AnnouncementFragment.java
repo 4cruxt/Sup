@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -12,8 +13,20 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.fole_Studios.sup.R;
 import com.fole_Studios.sup.adapters.AnnouncementAdapter;
 import com.fole_Studios.sup.models.Announcement;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Objects;
+
+import static com.fole_Studios.sup.custom.TimeAgo.getTimeAgo;
+import static com.fole_Studios.sup.database.DBqueries.getUniAndYearAndCourseInitials;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -22,7 +35,8 @@ public class AnnouncementFragment extends Fragment
 {
 
     private RecyclerView _recyclerview;
-    private ArrayList<Announcement> _announcements;
+    private ArrayList<Announcement> _announcements = new ArrayList<>();
+    private AnnouncementAdapter _adapter;
 
     public AnnouncementFragment()
     {
@@ -43,20 +57,49 @@ public class AnnouncementFragment extends Fragment
 
     private void initRecyclerview()
     {
-        dataList();
-        AnnouncementAdapter _adapter = new AnnouncementAdapter(_announcements, getContext());
+        _adapter = new AnnouncementAdapter(_announcements, getContext());
+        announcementData();
         _recyclerview.setLayoutManager(new LinearLayoutManager(getContext()));
         _recyclerview.setAdapter(_adapter);
-        _adapter.notifyDataSetChanged();
 
     }
 
-    private void dataList()
+    //todo: Move this method to DBqueries.class level
+    private void announcementData()
     {
-        _announcements = new ArrayList<>();
-        _announcements.add(new Announcement("EXAMS", "Exams will start on 17th August, 2020. First exam is CST04201 - Web Tech. Basics", "2d ago"));
-        _announcements.add(new Announcement("CLASSES", "Classes are over - two weeks for studying before exams", "10:45 am"));
-        _announcements.add(new Announcement("GENERAL", "Students with less than 65% of attendance will be reprimanded by the end of this semister", "6d ago"));
+        String _userId = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
+        final FirebaseFirestore _firestore = FirebaseFirestore.getInstance();
 
+        _firestore.collection("USERS").document(_userId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>()
+        {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task)
+            {
+                if(task.isSuccessful())
+                {
+                    CollectionReference _collectionReference = _firestore.collection(getUniAndYearAndCourseInitials(task));
+                    _collectionReference.orderBy("announcement_id").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>()
+                    {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task)
+                        {
+                            if(task.isSuccessful())
+                            {
+                                for(DocumentSnapshot _documentSnapshot : Objects.requireNonNull(task.getResult()))
+                                {
+                                    Date _createdDate = _documentSnapshot.getDate("created_at");
+                                    long _mills = Objects.requireNonNull(_createdDate).getTime();
+                                    String date = getTimeAgo(_mills);
+
+                                    _announcements.add(new Announcement(Objects.requireNonNull(_documentSnapshot.get("announcement_type")).toString(), Objects.requireNonNull(_documentSnapshot.get("announcement")).toString(), date));
+                                }
+                                _adapter.notifyDataSetChanged();
+                            }
+                        }
+                    });
+                }
+            }
+        });
     }
+
 }

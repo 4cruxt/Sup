@@ -1,4 +1,4 @@
-package com.fole_Studios.sup.glide;
+package com.fole_Studios.sup.custom;
 
 import com.bumptech.glide.annotation.GlideModule;
 import com.bumptech.glide.module.AppGlideModule;

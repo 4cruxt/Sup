@@ -9,14 +9,19 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.fole_Studios.sup.adapters.EventAdapter;
+import com.fole_Studios.sup.adapters.TimelineAdapter;
 import com.fole_Studios.sup.models.EventFeatured;
+import com.fole_Studios.sup.models.Timeline;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -174,6 +179,7 @@ public class DBqueries
                                 }
 
                                 _adapter.notifyDataSetChanged();
+                                //todo: next update make sure you limit query size to 3 per user. You should not get all data from the database without pagination.
                             }
                             else
                             {
@@ -189,6 +195,111 @@ public class DBqueries
                 {
                     Log.e("UNIVERSITY FAILURE", Objects.requireNonNull(Objects.requireNonNull(task.getException()).getMessage()));
                 }
+            }
+        });
+    }
+
+    public static void getModuleTimeline(final ShimmerFrameLayout _placeholder, final RecyclerView _recyclerView, final ArrayList<Timeline> _timelines, final TimelineAdapter _adapter)
+    {
+        String _userId = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
+        final FirebaseFirestore _firestore = FirebaseFirestore.getInstance();
+
+        _firestore.collection("USERS").document(_userId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>()
+        {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task)
+            {
+                if(task.isSuccessful())
+                {
+//                    _limitScroll = 3;
+                    final CollectionReference _moduleCollectionRef = _firestore.collection(getUniAndYearAndCourseInitials(task));
+                    _moduleCollectionRef.orderBy("exam_day").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>()
+                    {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task)
+                        {
+                            if(task.isSuccessful())
+                            {
+                                _placeholder.setVisibility(View.INVISIBLE);
+                                _recyclerView.setVisibility(View.VISIBLE);
+                                for(DocumentSnapshot _queryDocumentSnapshot : Objects.requireNonNull(task.getResult()))
+                                {
+                                    _timelines.add(new Timeline(Objects.requireNonNull(_queryDocumentSnapshot.get("exam_time")).toString(), Objects.requireNonNull(_queryDocumentSnapshot.get("venue")).toString(), Objects.requireNonNull(_queryDocumentSnapshot.get("code")).toString() + " - " + Objects.requireNonNull(_queryDocumentSnapshot.get("name")).toString(), Objects.requireNonNull(_queryDocumentSnapshot.get("status")).toString()));
+                                }
+                                _adapter.notifyDataSetChanged();
+
+//                                _lastVisible = task.getResult().getDocuments().get(task.getResult().size() - 1);
+
+//                                //Performing page rescolling in order to update the data.
+//                                RecyclerView.OnScrollListener _onScrollListener = new RecyclerView.OnScrollListener()
+//                                {
+//                                    @Override
+//                                    public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState)
+//                                    {
+//                                        super.onScrollStateChanged(recyclerView, newState);
+//                                        if(newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL)
+//                                        {
+//                                            _isScolling = true;
+//                                        }
+//                                    }
+//
+//                                    @Override
+//                                    public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy)
+//                                    {
+//                                        super.onScrolled(recyclerView, dx, dy);
+//
+//                                        LinearLayoutManager _linearLayoutManager = ((LinearLayoutManager) recyclerView.getLayoutManager());
+//                                        int _firstVisibleItemPosition = Objects.requireNonNull(_linearLayoutManager).findFirstVisibleItemPosition();
+//                                        int _visibleItemCount = _linearLayoutManager.getChildCount();
+//                                        int _totalItemCount = _linearLayoutManager.getItemCount();
+//
+//                                        if(_isScolling && (_firstVisibleItemPosition + _visibleItemCount == _totalItemCount) &&  !_isLastItemReached)
+//                                        {
+//                                            _isScolling = false;
+//
+//                                            Query _newQuery = _moduleCollectionRef.orderBy("exam_day").startAfter(_lastVisible).limit(_limitScroll);
+//                                            _newQuery.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>()
+//                                            {
+//                                                @Override
+//                                                public void onComplete(@NonNull Task<QuerySnapshot> task)
+//                                                {
+//                                                    if(task.isSuccessful())
+//                                                    {
+//                                                        for(DocumentSnapshot _documentSnapshot : Objects.requireNonNull(task.getResult()))
+//                                                        {
+//                                                            _timelines.add(new Timeline(Objects.requireNonNull(_documentSnapshot.get("exam_time")).toString(), Objects.requireNonNull(_documentSnapshot.get("venue")).toString(), Objects.requireNonNull(_documentSnapshot.get("code")).toString() + " - " + Objects.requireNonNull(_documentSnapshot.get("name")).toString(), Objects.requireNonNull(_documentSnapshot.get("status")).toString()));
+//                                                        }
+//                                                        _adapter.notifyDataSetChanged();
+//                                                        _lastVisible = task.getResult().getDocuments().get(task.getResult().size() - 1);
+//
+//                                                        if(task.getResult().size() < _limitScroll)
+//                                                        {
+//                                                            _isLastItemReached = true;
+//                                                        }
+//                                                    }
+//                                                }
+//                                            });
+//                                        }
+//                                    }
+//                                };
+//
+//                                //Here the recyclerview listenes if it has been touched in order to update the information.
+//                                _recyclerView.addOnScrollListener(_onScrollListener);
+                            }
+                            else
+                            {
+                                _recyclerView.setVisibility(View.INVISIBLE);
+                                _placeholder.setVisibility(View.VISIBLE);
+                                Log.i("FIREBASE ERROR", Objects.requireNonNull(Objects.requireNonNull(task.getException()).getMessage()));
+                            }
+                        }
+                    });
+                }
+                else
+                {
+                    Log.i("FIREBASE ERROR", Objects.requireNonNull(Objects.requireNonNull(task.getException()).getMessage()));
+                }
+
             }
         });
     }
