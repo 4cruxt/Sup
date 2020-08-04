@@ -2,12 +2,12 @@ package com.fole_Studios.sup.models;
 
 public class EventFeatured
 {
-    private int _eventPhoto;
+    private String _eventPhoto;
     private String _eventDate;
     private String _eventMonth;
     private String _eventTitle;
 
-    public EventFeatured(int eventPhoto, String eventTitle, String eventDate, String eventMonth)
+    public EventFeatured(String eventPhoto, String eventTitle, String eventDate, String eventMonth)
     {
         _eventPhoto = eventPhoto;
         _eventDate = eventDate;
@@ -15,12 +15,12 @@ public class EventFeatured
         _eventTitle = eventTitle;
     }
 
-    public int getEventPhoto()
+    public String getEventPhoto()
     {
         return _eventPhoto;
     }
 
-    public void setEventPhoto(int eventPhoto)
+    public void setEventPhoto(String eventPhoto)
     {
         _eventPhoto = eventPhoto;
     }
