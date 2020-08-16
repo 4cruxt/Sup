@@ -1,6 +1,8 @@
 package com.fole_Studios.sup.adapters;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,11 +16,18 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.fole_Studios.sup.R;
 import com.fole_Studios.sup.models.Timeline;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Objects;
+
+import static com.fole_Studios.sup.custom.TimeAgo.getRemainingTime;
 
 //@SuppressWarnings("ALL")
 public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.ViewHolder>
 {
+    private static final String TAG = "TimelineAdapter";
     private ArrayList<Timeline> _timelines;
     private Context _context;
 
@@ -41,13 +50,52 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.ViewHo
     public void onBindViewHolder(@NonNull ViewHolder holder, int position)
     {
         holder._courseName.setText(_timelines.get(position).getCourseName());
-        holder._startTime.setText(_timelines.get(position).getStartTime());
         holder._venueName.setText(_timelines.get(position).getVenueName());
         holder._activeLecture.setText(_timelines.get(position).getActiveLecture());
 
-        String activeLecture = _timelines.get(position).getActiveLecture();
+        statusChecker(holder, position, _timelines.get(position).getActiveLecture());
+        timeNotifier(holder, position);
 
-        if(activeLecture.equals("ONGOING LECTURE"))
+    }
+
+    @SuppressLint("SetTextI18n")
+    private void timeNotifier(ViewHolder holder, int position)
+    {
+        String activeTimeline = _timelines.get(position).getStartTime();
+
+        @SuppressLint("SimpleDateFormat") DateFormat _dateFormat = new SimpleDateFormat("dd/MM/yyyy - hh:mm a");
+        try
+        {
+            Date _createdDate = _dateFormat.parse(activeTimeline);
+            long _mills = Objects.requireNonNull(_createdDate).getTime();
+            String date = getRemainingTime(_mills);
+
+            if(date.isEmpty())
+            {
+                holder._startTime.setText(_timelines.get(position).getStartTime());
+            }
+            else
+            {
+                holder._startTime.setText(date);
+            }
+
+            if(date.equals("NOW"))
+            {
+                holder._activeLecture.setText("ONGOING");
+                statusChecker(holder, position, "ONGOING");
+            }
+        }
+        catch(Exception e)
+        {
+            Log.d(TAG, "timeNotifier: " + e.getMessage());
+        }
+
+    }
+
+    public void statusChecker(ViewHolder holder, int position, String status)
+    {
+
+        if(status.contains("ONGOING"))
         {
             holder._activeIcon.setColorFilter(ContextCompat.getColor(_context, R.color.colorLightGreen));
         }
@@ -55,7 +103,6 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.ViewHo
         {
             holder._activeIcon.setColorFilter(ContextCompat.getColor(_context, R.color.colorBackgroundWhite));
         }
-
     }
 
     @Override

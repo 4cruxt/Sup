@@ -47,7 +47,7 @@
         android:id="@+id/c_auth_opt_phone_number"
         android:layout_width="300dp"
         android:layout_height="45dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="60dp"
         android:backgroundTint="@color/colorPrimaryPartial"
         android:ems="10"
         android:hint="e.g: +255743809705"
@@ -59,25 +59,27 @@
         android:textColorHint="@color/colorPrimaryPartial"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="@+id/c_auth_opt_title"
-        app:layout_constraintHorizontal_bias="0.512"
         app:layout_constraintStart_toStartOf="@+id/c_auth_opt_title"
-        app:layout_constraintTop_toBottomOf="@+id/c_auth_opt_pss_name" />
+        app:layout_constraintTop_toBottomOf="@+id/c_auth_opt_title" />
 
     <in.aabhasjindal.otptextview.OtpTextView
         android:id="@+id/c_auth_opt_number"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/colorPrimaryDark"
-        android:visibility="invisible"
+        app:bar_active_color="@color/colorPrimaryPartial"
         app:bar_enabled="true"
         app:bar_height="2dp"
         app:height="40dp"
+        app:hide_otp="false"
         app:layout_constraintEnd_toEndOf="@+id/c_auth_opt_phone_number"
         app:layout_constraintStart_toStartOf="@+id/c_auth_opt_phone_number"
         app:layout_constraintTop_toBottomOf="@+id/c_auth_opt_phone_number"
-        app:length="4"
+        app:length="6"
         app:otp_text_size="24dp"
-        app:width="40dp" />
+        app:width="40dp">
+
+    </in.aabhasjindal.otptextview.OtpTextView>
 
     <ProgressBar
         android:id="@+id/c_auth_opt_progressBar"
@@ -94,16 +96,17 @@
         android:id="@+id/c_auth_opt_pss_name"
         android:layout_width="300dp"
         android:layout_height="45dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="14dp"
         android:backgroundTint="@color/colorPrimaryPartial"
         android:ems="10"
-        android:hint="Username"
+        android:hint="Username(new users only)"
         android:inputType="textPersonName"
         android:paddingStart="8dp"
         android:paddingEnd="8dp"
         android:textColor="@color/colorAccent"
         android:textColorHint="@color/colorPrimaryPartial"
         android:textSize="24sp"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="@+id/c_auth_opt_title"
         app:layout_constraintStart_toStartOf="@+id/c_auth_opt_title"
         app:layout_constraintTop_toBottomOf="@+id/c_auth_opt_title" />
@@ -160,14 +163,6 @@
             android:layout_height="45dp"
             android:checked="true"
             android:text="Computer Science"
-            app:chipSurfaceColor="@color/colorPrimaryPartial" />
-
-        <com.google.android.material.chip.Chip
-            android:id="@+id/c_none_chip"
-            style="@style/Widget.MaterialComponents.Chip.Choice"
-            android:layout_width="wrap_content"
-            android:layout_height="45dp"
-            android:text="None"
             app:chipSurfaceColor="@color/colorPrimaryPartial" />
 
 
@@ -276,5 +271,22 @@
         app:layout_constraintEnd_toEndOf="@+id/c_auth_choice_uni_text"
         app:layout_constraintStart_toStartOf="@+id/c_auth_choice_uni_text"
         app:layout_constraintTop_toTopOf="@+id/c_auth_choice_year_text" />
+
+    <Button
+        android:id="@+id/c_auth_opt_new_user_button"
+        android:layout_width="wrap_content"
+        android:layout_height="37dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/unfocused_button"
+        android:text="New"
+        android:textAllCaps="false"
+        android:textColor="@color/colorBackgroundWhite"
+        android:visibility="visible"
+        app:icon="@drawable/ic_profile_24"
+        app:iconTint="@color/colorBackgroundWhite"
+        app:layout_constraintEnd_toEndOf="@+id/c_auth_opt_title"
+        app:layout_constraintStart_toStartOf="@+id/c_auth_opt_title"
+        app:layout_constraintTop_toBottomOf="@+id/c_auth_opt_title"
+        app:rippleColor="@color/colorPrimaryPartial" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

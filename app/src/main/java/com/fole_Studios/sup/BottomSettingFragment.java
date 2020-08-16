@@ -9,9 +9,12 @@ import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 
+import com.fole_Studios.sup.authentication.AuthActivity;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import java.util.Objects;
+
+import static com.fole_Studios.sup.database.DBqueries.logoutUser;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -42,6 +45,10 @@ public class BottomSettingFragment extends BottomSheetDialogFragment
             public void onClick(View v)
             {
                 //todo: logout out user from the system return him/her to the registration page.
+                logoutUser();
+                Intent authIntent = new Intent(getContext(), AuthActivity.class);
+                Objects.requireNonNull(getContext()).startActivity(authIntent);
+                MainActivity.selfIntent.finish();
             }
         });
 

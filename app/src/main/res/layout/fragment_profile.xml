@@ -149,7 +149,8 @@
                 android:text="@string/edit_profile"
                 android:textAllCaps="false"
                 android:textColor="@color/colorWhite"
-                android:visibility="invisible"
+                android:visibility="visible"
+                app:backgroundTint="@color/colorPrimaryPartial"
                 app:layout_constraintBottom_toBottomOf="@+id/p_m_c_course_name"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />

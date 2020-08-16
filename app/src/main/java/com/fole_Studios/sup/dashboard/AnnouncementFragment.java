@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -26,6 +27,8 @@ import java.util.Date;
 import java.util.Objects;
 
 import static com.fole_Studios.sup.custom.TimeAgo.getTimeAgo;
+import static com.fole_Studios.sup.database.DBqueries.displayNotification;
+import static com.fole_Studios.sup.database.DBqueries.enableFloatingButton;
 import static com.fole_Studios.sup.database.DBqueries.getUniAndYearAndCourseInitials;
 
 /**
@@ -33,10 +36,12 @@ import static com.fole_Studios.sup.database.DBqueries.getUniAndYearAndCourseInit
  */
 public class AnnouncementFragment extends Fragment
 {
-
+    private static final int ANN_FRAGMENT_ID = 2;
     private RecyclerView _recyclerview;
     private ArrayList<Announcement> _announcements = new ArrayList<>();
     private AnnouncementAdapter _adapter;
+    private ProgressBar _progressBar;
+
 
     public AnnouncementFragment()
     {
@@ -50,8 +55,11 @@ public class AnnouncementFragment extends Fragment
         View _view = inflater.inflate(R.layout.fragment_announcement, container, false);
 
         _recyclerview = _view.findViewById(R.id.ann_main_recyclerview);
+        _progressBar = _view.findViewById(R.id.ann_main_progress_bar);
 
+        enableFloatingButton(ANN_FRAGMENT_ID);
         initRecyclerview();
+
         return _view;
     }
 
@@ -67,7 +75,7 @@ public class AnnouncementFragment extends Fragment
     //todo: Move this method to DBqueries.class level
     private void announcementData()
     {
-        String _userId = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
+        final String _userId = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
         final FirebaseFirestore _firestore = FirebaseFirestore.getInstance();
 
         _firestore.collection("USERS").document(_userId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>()
@@ -85,6 +93,8 @@ public class AnnouncementFragment extends Fragment
                         {
                             if(task.isSuccessful())
                             {
+                                _progressBar.setVisibility(View.INVISIBLE);
+
                                 for(DocumentSnapshot _documentSnapshot : Objects.requireNonNull(task.getResult()))
                                 {
                                     Date _createdDate = _documentSnapshot.getDate("created_at");
@@ -94,6 +104,15 @@ public class AnnouncementFragment extends Fragment
                                     _announcements.add(new Announcement(Objects.requireNonNull(_documentSnapshot.get("announcement_type")).toString(), Objects.requireNonNull(_documentSnapshot.get("announcement")).toString(), date));
                                 }
                                 _adapter.notifyDataSetChanged();
+
+                                _firestore.collection("USERS").document(_userId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>()
+                                {
+                                    @Override
+                                    public void onComplete(@NonNull Task<DocumentSnapshot> task)
+                                    {
+                                        displayNotification(getContext(), task, _announcements, "announcements", "Announcement", "New Announcement!");
+                                    }
+                                });
                             }
                         }
                     });

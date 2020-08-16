@@ -17,6 +17,7 @@ import com.fole_Studios.sup.R;
 
 import java.util.Objects;
 
+import static com.fole_Studios.sup.database.DBqueries.enableFloatingButton;
 import static com.fole_Studios.sup.database.DBqueries.getUserDataFromDatabase;
 
 /**
@@ -25,6 +26,7 @@ import static com.fole_Studios.sup.database.DBqueries.getUserDataFromDatabase;
 public class ProfileFragment extends Fragment
 {
 
+    private static final int PROF_FRAGMENT_ID = 5;
     private ImageView _settingButton;
     private ImageView _verificationBadge;
     private Button _editButton;
@@ -49,6 +51,7 @@ public class ProfileFragment extends Fragment
         _editButton = _view.findViewById(R.id.p_m_c_edit_pro_button);
         _verificationBadge = _view.findViewById(R.id.p_m_c_verified_badge);
 
+        enableFloatingButton(PROF_FRAGMENT_ID);
         enableBottomNav();
         loadDatabaseData();
         return _view;

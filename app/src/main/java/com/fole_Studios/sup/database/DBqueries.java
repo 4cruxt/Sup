@@ -1,6 +1,14 @@
 package com.fole_Studios.sup.database;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.BitmapFactory;
+import android.media.RingtoneManager;
+import android.net.Uri;
+import android.os.Build;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -9,11 +17,15 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.NotificationCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.facebook.shimmer.ShimmerFrameLayout;
+import com.fole_Studios.sup.MainActivity;
+import com.fole_Studios.sup.R;
 import com.fole_Studios.sup.adapters.EventAdapter;
 import com.fole_Studios.sup.adapters.TimelineAdapter;
+import com.fole_Studios.sup.models.Announcement;
 import com.fole_Studios.sup.models.EventFeatured;
 import com.fole_Studios.sup.models.Timeline;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -45,6 +57,8 @@ public class DBqueries
     //Firebase instances
 
     //Firebase methods
+
+    //@method store user data into the firebase firestore.
     public static void setUserDataToDatabase(String username)
     {
         updateUserName(username);
@@ -54,7 +68,7 @@ public class DBqueries
         _user.put("username", _currentUser.getDisplayName());
         _user.put("user_reg_number", "");
         _user.put("user_bio", "");
-        _user.put("user_course", "");
+        _user.put("user_course", "Computer Science");
         _user.put("university", "Mbeya University of Science and Technology - MUST");
         _user.put("region", "Mbeya");
         _user.put("university_year", "1");
@@ -63,6 +77,7 @@ public class DBqueries
         _firestore.collection("USERS").document(_currentUser.getUid()).set(_user);
     }
 
+    //@method update authenticated username
     public static void updateUserName(String username)
     {
         //adding user name to this authenticated user.
@@ -70,13 +85,14 @@ public class DBqueries
         Objects.requireNonNull(_currentUser).updateProfile(_userUpdates);
     }
 
+    //@method update user data in the firestore database
     public static void updateUserDataInDatabase(TextView username, TextView regNumber, TextView courseName, TextView userBio, final Context context)
     {
 
         Map<String, Object> _userUpdate = new HashMap<>();
         _userUpdate.put("user_reg_number", regNumber.getText().toString());
         _userUpdate.put("username", username.getText().toString());
-        _userUpdate.put("user_course", courseName.getText().toString());
+        _userUpdate.put("user_course", courseName.getText().toString());//todo: this should be updated in the near future in order a user to enter course data.
         _userUpdate.put("user_bio", userBio.getText().toString());
 
         updateUserName(username.getText().toString());
@@ -98,6 +114,7 @@ public class DBqueries
         });
     }
 
+    //@method retrieve user data from the firebase database
     public static void getUserDataFromDatabase(TextView username, final TextView userBio, final TextView userCourse, final TextView userReg, final Button editProButton, final ImageView verificationBadge)
     {
         //get username
@@ -112,6 +129,11 @@ public class DBqueries
             {
                 if(task.isSuccessful())
                 {
+                    if(editProButton != null)
+                    {
+                        editProButton.setVisibility(View.INVISIBLE);
+                    }
+
                     DocumentSnapshot _documentSnapshot = task.getResult();
                     if(Objects.requireNonNull(Objects.requireNonNull(_documentSnapshot).get("user_reg_number")).toString().length() > 0)
                     {
@@ -151,7 +173,8 @@ public class DBqueries
         });
     }
 
-    public static void getUniversityEvents(final EventAdapter _adapter, final ArrayList<EventFeatured> _eventFeatured, final ProgressBar progressBar)
+    //@method retrieve university events from the firebase database
+    public static void getUniversityEvents(final Context context, final EventAdapter _adapter, final ArrayList<EventFeatured> _eventFeatured, final ProgressBar progressBar)
     {
         String _userId = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
         final String[] _university = new String[1];
@@ -164,31 +187,41 @@ public class DBqueries
                 if(task.isSuccessful())
                 {
 
-                    //Find the correspond events within the given university.
-                    _firestore.collection(getUniversityInitials(task, _university)).orderBy("date").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>()
+                    String _universityInitials = getUniversityInitials(task, _university);
+
+                    if(_universityInitials != null)
                     {
-                        @Override
-                        public void onComplete(@NonNull Task<QuerySnapshot> task)
+                        //Find the correspond events within the given university.
+                        _firestore.collection(_universityInitials).orderBy("date").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>()
                         {
-                            if(task.isSuccessful())
+                            @Override
+                            public void onComplete(@NonNull Task<QuerySnapshot> task)
                             {
-                                progressBar.setVisibility(View.INVISIBLE);
-                                for(QueryDocumentSnapshot _documentSnapshot : Objects.requireNonNull(task.getResult()))
+                                if(task.isSuccessful())
                                 {
-                                    _eventFeatured.add(new EventFeatured(Objects.requireNonNull(_documentSnapshot.get("poster")).toString(), Objects.requireNonNull(_documentSnapshot.get("name")).toString(), Objects.requireNonNull(_documentSnapshot.get("date")).toString().substring(0, 2), Objects.requireNonNull(_documentSnapshot.get("date")).toString().substring(3, 6)));
+                                    progressBar.setVisibility(View.INVISIBLE);
+                                    for(QueryDocumentSnapshot _documentSnapshot : Objects.requireNonNull(task.getResult()))
+                                    {
+                                        _eventFeatured.add(new EventFeatured(Objects.requireNonNull(_documentSnapshot.get("poster")).toString(), Objects.requireNonNull(_documentSnapshot.get("name")).toString(), Objects.requireNonNull(_documentSnapshot.get("date")).toString().substring(0, 2), Objects.requireNonNull(_documentSnapshot.get("date")).toString().substring(3, 6)));
+                                    }
+
+                                    _adapter.notifyDataSetChanged();
+                                    //todo: next update make sure you limit query size to 3 per user. You should not get all data from the database without pagination.
+                                }
+                                else
+                                {
+                                    progressBar.setVisibility(View.VISIBLE);
+                                    Log.e("FIREBASE QUERY ERROR", Objects.requireNonNull(Objects.requireNonNull(task.getException()).getMessage()));
                                 }
 
-                                _adapter.notifyDataSetChanged();
-                                //todo: next update make sure you limit query size to 3 per user. You should not get all data from the database without pagination.
                             }
-                            else
-                            {
-                                progressBar.setVisibility(View.VISIBLE);
-                                Log.e("FIREBASE QUERY ERROR", Objects.requireNonNull(Objects.requireNonNull(task.getException()).getMessage()));
-                            }
+                        });
+                    }
+                    else
+                    {
+                        FancyToast.makeText(context, "Soon your university will be included!", FancyToast.LENGTH_SHORT, FancyToast.INFO, false);
+                    }
 
-                        }
-                    });
 
                 }
                 else
@@ -199,7 +232,8 @@ public class DBqueries
         });
     }
 
-    public static void getModuleTimeline(final ShimmerFrameLayout _placeholder, final RecyclerView _recyclerView, final ArrayList<Timeline> _timelines, final TimelineAdapter _adapter)
+    //@method retrieve module exam timeline from thee firebase database
+    public static void getModuleExamTimeline(final Context context, final ShimmerFrameLayout _placeholder, final RecyclerView _recyclerView, final ArrayList<Timeline> _timelines, final TimelineAdapter _adapter)
     {
         String _userId = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
         final FirebaseFirestore _firestore = FirebaseFirestore.getInstance();
@@ -212,21 +246,23 @@ public class DBqueries
                 if(task.isSuccessful())
                 {
 //                    _limitScroll = 3;
-                    final CollectionReference _moduleCollectionRef = _firestore.collection(getUniAndYearAndCourseInitials(task));
-                    _moduleCollectionRef.orderBy("exam_day").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>()
+                    if(_firestore.collection(getUniAndYearAndCourseInitials(task)) != null)
                     {
-                        @Override
-                        public void onComplete(@NonNull Task<QuerySnapshot> task)
+                        final CollectionReference _moduleCollectionRef = _firestore.collection(getUniAndYearAndCourseInitials(task));
+                        _moduleCollectionRef.orderBy("exam_day").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>()
                         {
-                            if(task.isSuccessful())
+                            @Override
+                            public void onComplete(@NonNull Task<QuerySnapshot> task)
                             {
-                                _placeholder.setVisibility(View.INVISIBLE);
-                                _recyclerView.setVisibility(View.VISIBLE);
-                                for(DocumentSnapshot _queryDocumentSnapshot : Objects.requireNonNull(task.getResult()))
+                                if(task.isSuccessful())
                                 {
-                                    _timelines.add(new Timeline(Objects.requireNonNull(_queryDocumentSnapshot.get("exam_time")).toString(), Objects.requireNonNull(_queryDocumentSnapshot.get("venue")).toString(), Objects.requireNonNull(_queryDocumentSnapshot.get("code")).toString() + " - " + Objects.requireNonNull(_queryDocumentSnapshot.get("name")).toString(), Objects.requireNonNull(_queryDocumentSnapshot.get("status")).toString()));
-                                }
-                                _adapter.notifyDataSetChanged();
+                                    _placeholder.setVisibility(View.INVISIBLE);
+                                    _recyclerView.setVisibility(View.VISIBLE);
+                                    for(DocumentSnapshot _queryDocumentSnapshot : Objects.requireNonNull(task.getResult()))
+                                    {
+                                        _timelines.add(new Timeline(Objects.requireNonNull(_queryDocumentSnapshot.get("exam_day") + " - " + _queryDocumentSnapshot.get("exam_time")).toString(), Objects.requireNonNull(_queryDocumentSnapshot.get("venue")).toString(), Objects.requireNonNull(_queryDocumentSnapshot.get("code")).toString() + " - " + Objects.requireNonNull(_queryDocumentSnapshot.get("name")).toString(), Objects.requireNonNull(_queryDocumentSnapshot.get("status")).toString()));
+                                    }
+                                    _adapter.notifyDataSetChanged();
 
 //                                _lastVisible = task.getResult().getDocuments().get(task.getResult().size() - 1);
 
@@ -285,15 +321,21 @@ public class DBqueries
 //
 //                                //Here the recyclerview listenes if it has been touched in order to update the information.
 //                                _recyclerView.addOnScrollListener(_onScrollListener);
+                                }
+                                else
+                                {
+                                    _recyclerView.setVisibility(View.INVISIBLE);
+                                    _placeholder.setVisibility(View.VISIBLE);
+                                    Log.i("FIREBASE ERROR", Objects.requireNonNull(Objects.requireNonNull(task.getException()).getMessage()));
+                                }
                             }
-                            else
-                            {
-                                _recyclerView.setVisibility(View.INVISIBLE);
-                                _placeholder.setVisibility(View.VISIBLE);
-                                Log.i("FIREBASE ERROR", Objects.requireNonNull(Objects.requireNonNull(task.getException()).getMessage()));
-                            }
-                        }
-                    });
+                        });
+                    }
+                    else
+                    {
+                        FancyToast.makeText(context, "Check your CR to register your course!", FancyToast.LENGTH_SHORT, FancyToast.INFO, false);
+                    }
+
                 }
                 else
                 {
@@ -304,6 +346,101 @@ public class DBqueries
         });
     }
 
+    //@method retrieve user course information
+    public static void getuserCourseInformation(final Context context, final TextView exam, final TextView project, final TextView module)
+    {
+        String userId = _currentUser.getUid();
+
+        _firestore.collection("USERS").document(userId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>()
+        {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task)
+            {
+                if(task.isSuccessful())
+                {
+                    String _univCourse = getUserUniversityCourse(task);
+                    String _univInitialsAndYear = getUniInitialsAndYear(task);
+
+                    if(_univInitialsAndYear != null)
+                    {
+                        _firestore.collection(_univInitialsAndYear).document(_univCourse).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>()
+                        {
+                            @Override
+                            public void onComplete(@NonNull Task<DocumentSnapshot> task)
+                            {
+                                if(task.isSuccessful())
+                                {
+                                    DocumentSnapshot _documentSnap = task.getResult();
+
+                                    exam.setText(Objects.requireNonNull(Objects.requireNonNull(_documentSnap).get("exams")).toString());
+                                    module.setText(Objects.requireNonNull(_documentSnap.get("modules")).toString());
+                                    project.setText(Objects.requireNonNull(_documentSnap.get("projects")).toString());
+                                }
+                                else
+                                {
+                                    Log.i("DASH INFO QUERY", Objects.requireNonNull(Objects.requireNonNull(task.getException()).getMessage()));
+                                }
+                            }
+                        });
+                    }
+                    else
+                    {
+                        //todo: Implement fancy toast for user to get information information
+                        FancyToast.makeText(context, "Soon your university will be included!", FancyToast.LENGTH_SHORT, FancyToast.INFO, false);
+                    }
+
+                }
+                else
+                {
+                    Log.i("DASHBOARD FIREBASE", Objects.requireNonNull(Objects.requireNonNull(task.getException()).getMessage()));
+                }
+            }
+        });
+    }
+
+    //@method logout user from the system
+    public static void logoutUser()
+    {
+        _auth.signOut();
+    }
+
+    //@method display announcement/assignment notification
+    public static void displayNotification(final Context context, final Task task, final ArrayList<Announcement> _announcements, final String _fieldName, final String _title, final String _textBody)
+    {
+        final String _univCourse = getUserUniversityCourse(task);
+        final String _univInitialsAndYear = getUniInitialsAndYear(task);
+
+        _firestore.collection(_univInitialsAndYear).document(_univCourse).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>()
+        {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task)
+            {
+                if(task.isSuccessful())
+                {
+                    DocumentSnapshot _documentSnap = task.getResult();
+
+                    long _annNumber = (long) _documentSnap.get(_fieldName);
+
+                    if(_announcements.size() > _annNumber)
+                    {
+
+                        _annNumber = _announcements.size();
+
+                        enableNotification(context, _title, _textBody);
+
+                        _firestore.collection(_univInitialsAndYear).document(_univCourse).update(_fieldName, _annNumber);
+
+                    }
+                }
+                else
+                {
+                    Log.i("DASH INFO QUERY", Objects.requireNonNull(Objects.requireNonNull(task.getException()).getMessage()));
+                }
+            }
+        });
+    }
+
+    //@method retrieve university initials from the firebase database
     public static String getUniversityInitials(Task task, String[] _university)
     {
         //Get initials from current user's university
@@ -316,6 +453,7 @@ public class DBqueries
         return _university[0];
     }
 
+    //@method return user university year from the database
     public static String getUserUniversityYear(Task task)
     {
         DocumentSnapshot _documentSnapshot = (DocumentSnapshot) task.getResult();
@@ -324,16 +462,18 @@ public class DBqueries
         return _universityYear;
     }
 
+    //@method return user university course
     public static String getUserUniversityCourse(Task task)
     {
         DocumentSnapshot _documentSnapshot = (DocumentSnapshot) task.getResult();
         String _universityCourseData = _documentSnapshot.get("user_course").toString();
-        int _universityCourseIndex = getCapsNameCourse(_universityCourseData).lastIndexOf(" ");
-        String _universityCourse = getCapsNameCourse(_universityCourseData).substring(0, _universityCourseIndex);
+//        int _universityCourseIndex = getCapsNameCourse(_universityCourseData).lastIndexOf(" ");
+//        String _universityCourse = getCapsNameCourse(_universityCourseData).substring(0, _universityCourseIndex);
 
-        return _universityCourse;
+        return _universityCourseData;
     }
 
+    //@method return university course into capital letters
     private static String getCapsNameCourse(String universityCourseData)
     {
         //Create a character array of the given university
@@ -366,49 +506,7 @@ public class DBqueries
         return _uniCourse;
     }
 
-    public static void getuserCourseInformation(final TextView exam, final TextView project, final TextView module)
-    {
-        String userId = _currentUser.getUid();
-
-        _firestore.collection("USERS").document(userId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>()
-        {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task)
-            {
-                if(task.isSuccessful())
-                {
-                    String _univCourse = getUserUniversityCourse(task);
-                    String _univInitialsAndYear = getUniInitialsAndYear(task);
-
-
-                    _firestore.collection(_univInitialsAndYear).document(_univCourse).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>()
-                    {
-                        @Override
-                        public void onComplete(@NonNull Task<DocumentSnapshot> task)
-                        {
-                            if(task.isSuccessful())
-                            {
-                                DocumentSnapshot _documentSnap = task.getResult();
-
-                                exam.setText(Objects.requireNonNull(Objects.requireNonNull(_documentSnap).get("exams")).toString());
-                                module.setText(Objects.requireNonNull(_documentSnap.get("modules")).toString());
-                                project.setText(Objects.requireNonNull(_documentSnap.get("projects")).toString());
-                            }
-                            else
-                            {
-                                Log.i("DASH INFO QUERY", Objects.requireNonNull(Objects.requireNonNull(task.getException()).getMessage()));
-                            }
-                        }
-                    });
-                }
-                else
-                {
-                    Log.i("DASHBOARD FIREBASE", Objects.requireNonNull(Objects.requireNonNull(task.getException()).getMessage()));
-                }
-            }
-        });
-    }
-
+    //@method return current time
     public static String getCurrentTime()
     {
         Calendar _calendar = Calendar.getInstance();
@@ -429,6 +527,7 @@ public class DBqueries
         return _timeline;
     }
 
+    //@method return university and year embedded initials
     public static String getUniInitialsAndYear(Task task)
     {
         String[] _university = new String[1];
@@ -440,6 +539,7 @@ public class DBqueries
         return _univInitialsAndYear;
     }
 
+    //@method return university, year and course embedded initials
     public static String getUniAndYearAndCourseInitials(Task task)
     {
         String _uniIniAndYearInitials = getUniInitialsAndYear(task);
@@ -456,5 +556,41 @@ public class DBqueries
 
         return _uniAndYearAndCourseInitials;
     }
+
+    public static void enableNotification(Context context, String title, String text)
+    {
+        int _notificationId = 0;
+        //initilieze and declare notification specifications
+        NotificationCompat.Builder _builder = new NotificationCompat.Builder(context).setSmallIcon(R.drawable.noti_icon).setLargeIcon(BitmapFactory.decodeResource(context.getResources(), R.drawable.not_icon)).setContentTitle(title).setContentText(text).setAutoCancel(true).setDefaults(NotificationCompat.DEFAULT_ALL);
+
+        //the actions in a notification are handled throuh intents
+        Intent intent = new Intent(context, context.getClass());
+        PendingIntent _pendingIntent = PendingIntent.getActivity(context, 0, intent, Intent.FLAG_ACTIVITY_NEW_TASK);
+        _builder.setContentIntent(_pendingIntent);
+        //set a tone when notification appears
+        Uri _path = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        _builder.setSound(_path);
+
+        //call notification manager so it can build and deliver the notificationn to the OS
+        NotificationManager _notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+
+        //Android 8 introduced a new requirements of setting the channelID property by using NotificationChannel.
+
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+        {
+            String channelId = "YOUR_CHANNEL_ID";
+            NotificationChannel _channel = new NotificationChannel(channelId, "Channel human readable title", NotificationManager.IMPORTANCE_DEFAULT);
+            _notificationManager.createNotificationChannel(_channel);
+            _builder.setChannelId(channelId);
+        }
+
+        _notificationManager.notify(_notificationId, _builder.build());
+    }
+
+    public static void enableFloatingButton(int fragmentId)
+    {
+        MainActivity.animateFab(fragmentId);
+    }
+
     //Firebase methods
 }

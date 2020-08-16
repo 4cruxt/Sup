@@ -22,8 +22,9 @@ import com.fole_Studios.sup.models.Timeline;
 import java.util.ArrayList;
 import java.util.Objects;
 
+import static com.fole_Studios.sup.database.DBqueries.enableFloatingButton;
 import static com.fole_Studios.sup.database.DBqueries.getCurrentTime;
-import static com.fole_Studios.sup.database.DBqueries.getModuleTimeline;
+import static com.fole_Studios.sup.database.DBqueries.getModuleExamTimeline;
 import static com.fole_Studios.sup.database.DBqueries.getuserCourseInformation;
 
 /**
@@ -32,6 +33,7 @@ import static com.fole_Studios.sup.database.DBqueries.getuserCourseInformation;
 public class DashboardFragment extends Fragment
 {
 
+    private static final int DASH_FRAGMENT_ID = 1;
     private ArrayList<Timeline> _timelines = new ArrayList<>();
     private RecyclerView _recyclerView;
     private TextView _exam, _project, _module, _timelineTime;
@@ -62,6 +64,7 @@ public class DashboardFragment extends Fragment
         CardView _annCard = _view.findViewById(R.id.d_m_ann_card);
         CardView _assignCard = _view.findViewById(R.id.d_m_assign_card);
 
+        enableFloatingButton(DASH_FRAGMENT_ID);
         initRecyclerview();
 
         enableFragment(_annCard, _assignCard);
@@ -129,8 +132,7 @@ public class DashboardFragment extends Fragment
 
     private void displayCourseInfo()
     {
-        getuserCourseInformation(_exam, _project, _module);
-
+        getuserCourseInformation(getContext(), _exam, _project, _module);
     }
 
     private void currentTime()
@@ -141,7 +143,7 @@ public class DashboardFragment extends Fragment
     //todo: In the next updates this database query method should be taken into the respective class i.e DBqueries.class
     private void moduleTimeline()
     {
-        getModuleTimeline(_placeholder, _recyclerView, _timelines, _adapter);
+        getModuleExamTimeline(getContext(), _placeholder, _recyclerView, _timelines, _adapter);
     }
 
 }

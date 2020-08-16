@@ -13,40 +13,71 @@ import com.fole_Studios.sup.navigation.DashboardFragment;
 import com.fole_Studios.sup.navigation.EventFragment;
 import com.fole_Studios.sup.navigation.ProfileFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class MainActivity extends AppCompatActivity
 {
 
     public static Activity selfIntent;
     private Fragment _fragment;
+    private static FloatingActionButton _timelineButton;
+    private static FloatingActionButton _annButton;
+    private static FloatingActionButton _assignButton;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState)
+    public static void animateFab(int position)
     {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        selfIntent = this;
-
-        BottomNavigationView _bottomNavigationView = findViewById(R.id.main_bottom_navigation);
-        _bottomNavigationView.setOnNavigationItemSelectedListener(navigationListener());
-
-        int _fragmentId = getIntent().getIntExtra("Fragment_id", 0);
-
-        if(_fragmentId == 2)
+        if(position == 1)
         {
-            _fragment = new ProfileFragment();
-            loadFragment(_fragment);
-            _bottomNavigationView.getMenu().getItem(2).setChecked(true);
+            _timelineButton.show();
+            _annButton.hide(new FloatingActionButton.OnVisibilityChangedListener()
+            {
+                @Override
+                public void onHidden(FloatingActionButton fab)
+                {
+                    super.onHidden(fab);
+                    _timelineButton.show();
+                }
+            });
+            _assignButton.hide(new FloatingActionButton.OnVisibilityChangedListener()
+            {
+                @Override
+                public void onHidden(FloatingActionButton fab)
+                {
+                    super.onHidden(fab);
+                    _timelineButton.show();
+                }
+            });
+        }
+        else if(position == 2)
+        {
+            _timelineButton.hide(new FloatingActionButton.OnVisibilityChangedListener()
+            {
+                @Override
+                public void onHidden(FloatingActionButton fab)
+                {
+                    super.onHidden(fab);
+                    _annButton.show();
+                }
+            });
+        }
+        else if(position == 3)
+        {
+            _timelineButton.hide(new FloatingActionButton.OnVisibilityChangedListener()
+            {
+                @Override
+                public void onHidden(FloatingActionButton fab)
+                {
+                    super.onHidden(fab);
+                    _assignButton.show();
+                }
+            });
         }
         else
         {
-            //Opening the first fragment.
-            _bottomNavigationView.getMenu().getItem(0).setChecked(true);
-            _fragment = new DashboardFragment();
-            loadFragment(_fragment);
+            _annButton.hide();
+            _assignButton.hide();
+            _timelineButton.hide();
         }
-
-
     }
 
     private BottomNavigationView.OnNavigationItemSelectedListener navigationListener()
@@ -83,4 +114,38 @@ public class MainActivity extends AppCompatActivity
         _transaction.replace(R.id.main_fragment_container, fragment);
         _transaction.commit();
     }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        selfIntent = this;
+
+        _timelineButton = findViewById(R.id.main_add_timeline_button);
+        _annButton = findViewById(R.id.main_add_ann_button);
+        _assignButton = findViewById(R.id.main_add_assign_button);
+
+        BottomNavigationView _bottomNavigationView = findViewById(R.id.main_bottom_navigation);
+        _bottomNavigationView.setOnNavigationItemSelectedListener(navigationListener());
+
+        int _fragmentId = getIntent().getIntExtra("Fragment_id", 0);
+
+        if(_fragmentId == 2)
+        {
+            _fragment = new ProfileFragment();
+            loadFragment(_fragment);
+            _bottomNavigationView.getMenu().getItem(2).setChecked(true);
+        }
+        else
+        {
+            //Opening the first fragment.
+            _bottomNavigationView.getMenu().getItem(0).setChecked(true);
+            _fragment = new DashboardFragment();
+            loadFragment(_fragment);
+        }
+
+
+    }
+
 }

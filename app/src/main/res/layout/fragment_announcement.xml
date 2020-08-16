@@ -48,4 +48,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/ann_main_actionBar"
         app:layout_constraintVertical_bias="0.3" />
+
+    <ProgressBar
+        android:id="@+id/ann_main_progress_bar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/ann_main_recyclerview"
+        app:layout_constraintTop_toBottomOf="@+id/ann_main_actionBar" />
 </androidx.constraintlayout.widget.ConstraintLayout>

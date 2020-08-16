@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -26,6 +27,8 @@ import java.util.Date;
 import java.util.Objects;
 
 import static com.fole_Studios.sup.custom.TimeAgo.getTimeAgo;
+import static com.fole_Studios.sup.database.DBqueries.displayNotification;
+import static com.fole_Studios.sup.database.DBqueries.enableFloatingButton;
 import static com.fole_Studios.sup.database.DBqueries.getUniAndYearAndCourseInitials;
 
 /**
@@ -33,10 +36,11 @@ import static com.fole_Studios.sup.database.DBqueries.getUniAndYearAndCourseInit
  */
 public class AssignmentFragment extends Fragment
 {
-
+    public static final int ASSIGN_FRAGMENT_ID = 3;
     private RecyclerView _recyclerview;
     private ArrayList<Announcement> _assignments = new ArrayList<>();
     private AnnouncementAdapter _adapter;
+    private ProgressBar _progressBar;
 
     public AssignmentFragment()
     {
@@ -50,7 +54,9 @@ public class AssignmentFragment extends Fragment
         View _view = inflater.inflate(R.layout.fragment_assignment, container, false);
 
         _recyclerview = _view.findViewById(R.id.assign_main_recyclerview);
+        _progressBar = _view.findViewById(R.id.assign_main_progress_bar);
 
+        enableFloatingButton(ASSIGN_FRAGMENT_ID);
         initRecyclerview();
         return _view;
     }
@@ -68,7 +74,7 @@ public class AssignmentFragment extends Fragment
     //todo: Move this method to DBqueries.class level
     private void assignmentData()
     {
-        String _userId = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
+        final String _userId = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
         final FirebaseFirestore _firestore = FirebaseFirestore.getInstance();
 
         _firestore.collection("USERS").document(_userId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>()
@@ -86,6 +92,8 @@ public class AssignmentFragment extends Fragment
                         {
                             if(task.isSuccessful())
                             {
+                                _progressBar.setVisibility(View.INVISIBLE);
+
                                 for(DocumentSnapshot _documentSnapshot : Objects.requireNonNull(task.getResult()))
                                 {
                                     Date _createdDate = _documentSnapshot.getDate("created_at");
@@ -95,6 +103,15 @@ public class AssignmentFragment extends Fragment
                                     _assignments.add(new Announcement(Objects.requireNonNull(_documentSnapshot.get("assignment_type")).toString(), Objects.requireNonNull(_documentSnapshot.get("assignment")).toString(), date));
                                 }
                                 _adapter.notifyDataSetChanged();
+
+                                _firestore.collection("USERS").document(_userId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>()
+                                {
+                                    @Override
+                                    public void onComplete(@NonNull Task<DocumentSnapshot> task)
+                                    {
+                                        displayNotification(getContext(), task, _assignments, "assignments", "Assignment", "New Assignment!");
+                                    }
+                                });
                             }
                         }
                     });

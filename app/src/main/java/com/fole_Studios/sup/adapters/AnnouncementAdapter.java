@@ -45,25 +45,21 @@ public class AnnouncementAdapter extends RecyclerView.Adapter<AnnouncementAdapte
 
         String _typeAnn = _announcements.get(position).getAnnType();
 
-        if(_typeAnn.equals("EXAMS"))
+        switch(_typeAnn)
         {
-            holder._annTypeHolder.setCardBackgroundColor(ContextCompat.getColor(_context, R.color.colorExamType));
-        }
-        else if(_typeAnn.equals("CLASSES"))
-        {
-            holder._annTypeHolder.setCardBackgroundColor(ContextCompat.getColor(_context, R.color.colorClassType));
-        }
-        else if(_typeAnn.equals("GENERAL"))
-        {
-            holder._annTypeHolder.setCardBackgroundColor(ContextCompat.getColor(_context, R.color.colorGeneralType));
-        }
-        else if(_typeAnn.equals("INDIVIDUAL"))
-        {
-            holder._annTypeHolder.setCardBackgroundColor(ContextCompat.getColor(_context, R.color.colorGreen));
-        }
-        else if(_typeAnn.equals("GROUP"))
-        {
-            holder._annTypeHolder.setCardBackgroundColor(ContextCompat.getColor(_context, R.color.colorGeneralType));
+            case "EXAMS":
+                holder._annTypeHolder.setCardBackgroundColor(ContextCompat.getColor(_context, R.color.colorExamType));
+                break;
+            case "CLASSES":
+                holder._annTypeHolder.setCardBackgroundColor(ContextCompat.getColor(_context, R.color.colorClassType));
+                break;
+            case "GENERAL":
+            case "GROUP":
+                holder._annTypeHolder.setCardBackgroundColor(ContextCompat.getColor(_context, R.color.colorGeneralType));
+                break;
+            case "INDIVIDUAL":
+                holder._annTypeHolder.setCardBackgroundColor(ContextCompat.getColor(_context, R.color.colorGreen));
+                break;
         }
 
     }

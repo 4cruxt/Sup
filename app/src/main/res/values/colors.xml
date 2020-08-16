@@ -11,4 +11,5 @@
     <color name="colorExamType">#00BCD4</color>
     <color name="colorClassType">#FF5722</color>
     <color name="colorGeneralType">#673AB7</color>
+    <color name="placeholder_grey_color">#DFDFDF</color>
 </resources>

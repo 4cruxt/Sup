@@ -45,6 +45,7 @@ public class AuthActivity extends AppCompatActivity
     private PhoneAuthProvider.OnVerificationStateChangedCallbacks _callbacks;
     private String _phone;
     private String _otpNumber;
+    private Button _newUserButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -57,12 +58,27 @@ public class AuthActivity extends AppCompatActivity
         _otpUserNumber = findViewById(R.id.c_auth_opt_phone_number);
         _otpNumberText = findViewById(R.id.c_auth_opt_number);
         _progressBar = findViewById(R.id.c_auth_opt_progressBar);
+        _newUserButton = findViewById(R.id.c_auth_opt_new_user_button);
 
         _firebaseAuth = FirebaseAuth.getInstance();
         _currentUser = _firebaseAuth.getCurrentUser();
 
         otpVerifier();
         verificationPassed();
+        userBehavior();
+    }
+
+    private void userBehavior()
+    {
+        _newUserButton.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                _newUserButton.setVisibility(View.INVISIBLE);
+                _otpPassengerName.setVisibility(View.VISIBLE);
+            }
+        });
     }
 
     private void otpVerifier()
@@ -79,7 +95,10 @@ public class AuthActivity extends AppCompatActivity
             public void onOTPComplete(String otp)
             {
                 //fired when user has entered the OTP fully.
-                _otpNumber = otp;
+                if(!otp.isEmpty())
+                {
+                    _otpNumber = otp;
+                }
             }
         });
     }
@@ -144,9 +163,9 @@ public class AuthActivity extends AppCompatActivity
 
                 if(code != null)
                 {
-                    _otpNumberText.setVisibility(View.VISIBLE);
                     _otpNumberText.setOTP(code);
-
+                    _otpButton.setVisibility(View.INVISIBLE);
+                    _progressBar.setVisibility(View.VISIBLE);
                     signInWithPhoneAuthCredential(phoneAuthCredential);
                 }
             }
@@ -155,7 +174,18 @@ public class AuthActivity extends AppCompatActivity
             public void onVerificationFailed(@NonNull FirebaseException e)
             {
                 Log.i("FIREBASE FAILURE", Objects.requireNonNull(e.getMessage()));
-                FancyToast.makeText(AuthActivity.this, "Verification failed. Try again", FancyToast.LENGTH_SHORT, FancyToast.ERROR, false).show();
+                if(e.getMessage().contains("We have blocked all requests from this device due to unusual activity. Try again later"))
+                {
+                    FancyToast.makeText(AuthActivity.this, "Device broken due to unusual activity. try again later", FancyToast.LENGTH_SHORT, FancyToast.ERROR, false).show();
+                }
+                else if(e.getMessage().contains("A network error (such as timeout, interrupted connection or unreachable host) has occurred"))
+                {
+                    FancyToast.makeText(AuthActivity.this, "Network Error!", FancyToast.LENGTH_SHORT, FancyToast.ERROR, false).show();
+                }
+                else
+                {
+                    FancyToast.makeText(AuthActivity.this, "Verification failed. Try again", FancyToast.LENGTH_SHORT, FancyToast.ERROR, false).show();
+                }
                 _progressBar.setVisibility(View.INVISIBLE);
                 _otpButton.setVisibility(View.VISIBLE);
             }
@@ -166,27 +196,29 @@ public class AuthActivity extends AppCompatActivity
                 super.onCodeSent(s, forceResendingToken);
                 _progressBar.setVisibility(View.INVISIBLE);
                 _otpButton.setVisibility(View.VISIBLE);
-                _otpNumberText.setVisibility(View.VISIBLE);
                 _otpUserNumber.setText(_phone);
 
-                _otpButton.setOnClickListener(new View.OnClickListener()
+                if(_otpNumberText.getVisibility() == View.VISIBLE && _otpNumber != null)
                 {
-                    @Override
-                    public void onClick(View v)
+                    _otpButton.setOnClickListener(new View.OnClickListener()
                     {
-                        if(_otpNumber.isEmpty())
+                        @Override
+                        public void onClick(View v)
                         {
-                            FancyToast.makeText(AuthActivity.this, "Enter sent code", FancyToast.LENGTH_SHORT, FancyToast.INFO, false).show();
+                            if(_otpNumber.isEmpty())
+                            {
+                                FancyToast.makeText(AuthActivity.this, "Enter sent code", FancyToast.LENGTH_SHORT, FancyToast.INFO, false).show();
+                            }
+                            else
+                            {
+                                _otpButton.setVisibility(View.INVISIBLE);
+                                _progressBar.setVisibility(View.VISIBLE);
+                                PhoneAuthCredential _credential = PhoneAuthProvider.getCredential(s, _otpNumber);
+                                signInWithPhoneAuthCredential(_credential);
+                            }
                         }
-                        else
-                        {
-                            _otpButton.setVisibility(View.INVISIBLE);
-                            _progressBar.setVisibility(View.VISIBLE);
-                            PhoneAuthCredential _credential = PhoneAuthProvider.getCredential(s, _otpNumber);
-                            signInWithPhoneAuthCredential(_credential);
-                        }
-                    }
-                });
+                    });
+                }
 
             }
         };
@@ -201,9 +233,22 @@ public class AuthActivity extends AppCompatActivity
             {
                 if(task.isSuccessful())
                 {
+                    //Sign in success, update UI with the signed-in user's information.
+                    FirebaseUser _user = Objects.requireNonNull(task.getResult()).getUser();
+                    long creationTimestamp = Objects.requireNonNull(Objects.requireNonNull(_user).getMetadata()).getCreationTimestamp();
+                    long lastLoginTimestamp = Objects.requireNonNull(Objects.requireNonNull(_user).getMetadata()).getLastSignInTimestamp();
 
-                    setUserDataToDatabase(_userName);
-                    sendUserToWelcome();
+                    if(creationTimestamp == lastLoginTimestamp)
+                    {
+                        //Create a new user with account
+                        setUserDataToDatabase(_userName);
+                        sendUserToWelcome();
+                    }
+                    else
+                    {
+                        //User exists, just login
+                        sendUserToHome();
+                    }
                 }
                 else
                 {

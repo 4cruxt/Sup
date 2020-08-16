@@ -1,5 +1,10 @@
 package com.fole_Studios.sup.custom;
 
+import org.joda.time.DateTime;
+import org.joda.time.Days;
+import org.joda.time.Hours;
+import org.joda.time.Minutes;
+
 public class TimeAgo
 {
     private static final int SECOND_MILLIS = 1000;
@@ -50,6 +55,32 @@ public class TimeAgo
         else
         {
             return diff / DAY_MILLIS + " days ago";
+        }
+    }
+
+    public static String getRemainingTime(long time)
+    {
+
+        long now = System.currentTimeMillis();
+
+        DateTime _startTime = new DateTime(now);
+        DateTime _endTime = new DateTime(time);
+
+        int _minutes = Minutes.minutesBetween(_startTime, _endTime).getMinutes() % 60;
+        int _hours = Hours.hoursBetween(_startTime, _endTime).getHours() % 24;
+        int _days = Days.daysBetween(_startTime, _endTime).getDays();
+
+        if(_days < 1 && _hours < 1 && _minutes <= 45 && _minutes != 1)
+        {
+            return _minutes + " mins remaining";
+        }
+        else if(_days < 1 && _hours < 1 && _minutes <= 1)
+        {
+            return "NOW";
+        }
+        else
+        {
+            return "";
         }
     }
 }

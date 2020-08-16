@@ -16,6 +16,7 @@ import com.fole_Studios.sup.models.EventFeatured;
 
 import java.util.ArrayList;
 
+import static com.fole_Studios.sup.database.DBqueries.enableFloatingButton;
 import static com.fole_Studios.sup.database.DBqueries.getUniversityEvents;
 
 
@@ -25,6 +26,7 @@ import static com.fole_Studios.sup.database.DBqueries.getUniversityEvents;
 public class EventFragment extends Fragment
 {
 
+    private static final int EVENT_FRAGMENT_ID = 4;
     private RecyclerView _recyclerView;
     private ProgressBar _progressBar;
     private EventAdapter _adapter;
@@ -44,6 +46,7 @@ public class EventFragment extends Fragment
         _recyclerView = _view.findViewById(R.id.e_m_recyclerview);
         _progressBar = _view.findViewById(R.id.e_m_progress_bar);
 
+        enableFloatingButton(EVENT_FRAGMENT_ID);
         initRecyclerview();
 
         return _view;
@@ -52,7 +55,7 @@ public class EventFragment extends Fragment
     private void initRecyclerview()
     {
         _adapter = new EventAdapter(getContext(), _eventFeatured);
-        getUniversityEvents(_adapter, _eventFeatured, _progressBar);
+        getUniversityEvents(getContext(), _adapter, _eventFeatured, _progressBar);
         _recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         _recyclerView.setAdapter(_adapter);
     }
