@@ -12,6 +12,12 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".editor.TimelineActivity"
+            android:theme="@style/EditorTheme" />
+        <activity
+            android:name=".editor.AssignAnnounceActivity"
+            android:theme="@style/EditorTheme" />
+        <activity
             android:name=".SplashActivity"
             android:screenOrientation="portrait"
             android:theme="@style/SplashTheme">
@@ -23,11 +29,11 @@
         </activity>
         <activity
             android:name=".authentication.AuthActivity"
-            android:theme="@style/AuthTheme"></activity>
+            android:theme="@style/AuthTheme" />
         <activity android:name=".OnBoardActivity" />
         <activity
             android:name=".EditProfileActivity"
-            android:theme="@style/EditProfileTheme" />
+            android:theme="@style/EditorTheme" />
         <activity android:name=".MainActivity" />
 
         <meta-data

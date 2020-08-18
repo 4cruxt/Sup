@@ -55,7 +55,7 @@ public class EditProfileActivity extends AppCompatActivity
 
     private void openMainIntent()
     {
-        MainActivity.selfIntent.finish();
+        MainActivity._selfIntent.finish();
         Intent mainIntent = new Intent(EditProfileActivity.this, MainActivity.class);
         mainIntent.putExtra("Fragment_id", 2);
         startActivity(mainIntent);

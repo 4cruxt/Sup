@@ -48,7 +48,7 @@ public class BottomSettingFragment extends BottomSheetDialogFragment
                 logoutUser();
                 Intent authIntent = new Intent(getContext(), AuthActivity.class);
                 Objects.requireNonNull(getContext()).startActivity(authIntent);
-                MainActivity.selfIntent.finish();
+                MainActivity._selfIntent.finish();
             }
         });
 
