@@ -13,7 +13,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.fole_Studios.sup.editor.AssignAnnounceActivity;
-import com.fole_Studios.sup.editor.TimelineActivity;
+import com.fole_Studios.sup.editor.TimelineEditActivity;
 import com.fole_Studios.sup.navigation.DashboardFragment;
 import com.fole_Studios.sup.navigation.EventFragment;
 import com.fole_Studios.sup.navigation.ProfileFragment;
@@ -72,7 +72,7 @@ public class MainActivity extends AppCompatActivity
     private void fabClickedBehavior()
     {
         Activity _assignAnnounceActivity = new AssignAnnounceActivity();
-        Activity _timelineActivity = new TimelineActivity();
+        Activity _timelineActivity = new TimelineEditActivity();
 
         fabClicked(_timelineActivity, _timelineButton, TIMELINE_BUTTON_ID);
         fabClicked(_assignAnnounceActivity, _annButton, ANNOUNCEMENT_BUTTON_ID);

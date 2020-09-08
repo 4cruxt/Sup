@@ -4,13 +4,16 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.chivorn.smartmaterialspinner.SmartMaterialSpinner;
 import com.fole_Studios.sup.MainActivity;
 import com.fole_Studios.sup.OnBoardActivity;
 import com.fole_Studios.sup.R;
@@ -23,8 +26,14 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.shashank.sony.fancytoastlib.FancyToast;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
@@ -46,6 +55,16 @@ public class AuthActivity extends AppCompatActivity
     private String _phone;
     private String _otpNumber;
     private Button _newUserButton;
+    private ArrayList<String> _universityList;
+    private SmartMaterialSpinner<String> _universitySpinner;
+    private ArrayList<String> _courseList;
+    private SmartMaterialSpinner<String> _courseSpinner;
+    private SmartMaterialSpinner<String> _yearSpinner;
+    private ArrayList<String> _yearList;
+    private FirebaseFirestore _firestore;
+    private String _selectedUniversity;
+    private String _selectedCourse;
+    private String _selectedYear;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -59,13 +78,21 @@ public class AuthActivity extends AppCompatActivity
         _otpNumberText = findViewById(R.id.c_auth_opt_number);
         _progressBar = findViewById(R.id.c_auth_opt_progressBar);
         _newUserButton = findViewById(R.id.c_auth_opt_new_user_button);
+        _universitySpinner = findViewById(R.id.c_auth_university_spinner);
+        _courseSpinner = findViewById(R.id.c_auth_course_spinner);
+        _yearSpinner = findViewById(R.id.c_auth_year_spinner);
 
         _firebaseAuth = FirebaseAuth.getInstance();
         _currentUser = _firebaseAuth.getCurrentUser();
 
+        _firestore = FirebaseFirestore.getInstance();
+
+        _otpButton.setVisibility(View.INVISIBLE);
+
         otpVerifier();
         verificationPassed();
         userBehavior();
+        setupSpinner();
     }
 
     private void userBehavior()
@@ -257,6 +284,138 @@ public class AuthActivity extends AppCompatActivity
 
                 _progressBar.setVisibility(View.INVISIBLE);
                 _otpButton.setVisibility(View.VISIBLE);
+            }
+        });
+    }
+
+    private void initSpinner(final SmartMaterialSpinner<String> spinner, final ArrayList<String> dataList)
+    {
+
+
+        spinner.setItem(dataList);
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
+        {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id)
+            {
+                //Display selected item.
+                Toast.makeText(AuthActivity.this, dataList.get(position), Toast.LENGTH_SHORT).show();
+
+                if(spinner.getId() == _universitySpinner.getId())
+                {
+                    _selectedUniversity = dataList.get(position);
+                    _courseSpinner.setEnabled(true);
+                    courseSpinner();
+                }
+                else if(spinner.getId() == _courseSpinner.getId())
+                {
+                    _selectedCourse = dataList.get(position);
+                    _yearSpinner.setEnabled(true);
+                }
+                else if(spinner.getId() == _yearSpinner.getId())
+                {
+                    _selectedYear = dataList.get(position);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView)
+            {
+
+            }
+        });
+    }
+
+    private void setupSpinner()
+    {
+        _courseSpinner.setEnabled(false);
+        _yearSpinner.setEnabled(false);
+        universitySpinner();
+        yearSpinner();
+    }
+
+    private void yearSpinner()
+    {
+        yearDataList();
+        initSpinner(_yearSpinner, _yearList);
+    }
+
+    private void yearDataList()
+    {
+        _yearList = new ArrayList<>();
+
+        _yearList.add("Diploma - 1");
+        _yearList.add("Diploma - 2");
+        _yearList.add("Diploma - 3");
+        _yearList.add("Bachelor - 1");
+        _yearList.add("Bachelor - 2");
+        _yearList.add("Bachelor - 3");
+        _yearList.add("Bachelor - 4");
+    }
+
+    private void courseSpinner()
+    {
+        courseDataList();
+        initSpinner(_courseSpinner, _courseList);
+    }
+
+    private void courseDataList()
+    {
+        _courseList = new ArrayList<>();
+
+        if(_selectedUniversity != null)
+        {
+            int _startIndex = _selectedUniversity.indexOf("-");
+            int _endIndex = _selectedUniversity.length();
+            final String _uni = _selectedUniversity.substring(_startIndex, _endIndex).replace("-", "").replaceAll(" ", "").toUpperCase();
+
+
+            _firestore.collection("COURSES").document(_uni).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>()
+            {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task)
+                {
+                    if(task.isSuccessful())
+                    {
+                        DocumentSnapshot _documentSnapshot = task.getResult();
+                        assert _documentSnapshot != null;
+                        String _str = Objects.requireNonNull(Objects.requireNonNull(_documentSnapshot.get("courses")).toString().replace("[", "").replace("]", ""));
+                        String[] _arr = _str.split(",");
+                        _courseList.addAll(Arrays.asList(_arr));
+                    }
+                }
+            });
+
+        }
+
+    }
+
+    private void universitySpinner()
+    {
+        universityDataList();
+        initSpinner(_universitySpinner, _universityList);
+    }
+
+    private void universityDataList()
+    {
+        _universityList = new ArrayList<>();
+
+        _firestore.collection("COURSES").orderBy("universities").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>()
+        {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task)
+            {
+                if(task.isSuccessful())
+                {
+                    for(QueryDocumentSnapshot _documentSnapshot : Objects.requireNonNull(task.getResult()))
+                    {
+                        String _str = Objects.requireNonNull(_documentSnapshot.get("universities")).toString().replace("[", "").replace("]", "");
+                        String[] _arr = _str.split(",");
+
+                        _universityList.addAll(Arrays.asList(_arr));
+                    }
+                }
             }
         });
     }

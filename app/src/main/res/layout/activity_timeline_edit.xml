@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
+    tools:context=".editor.TimelineEditActivity">
+
+    <com.scwang.wave.MultiWaveHeader
+        android:id="@+id/edit_timeline_main_actionBar"
+        android:layout_width="match_parent"
+        android:layout_height="170dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:mwhCloseColor="@color/colorPrimaryPartial"
+        app:mwhColorAlpha="0.8"
+        app:mwhIsRunning="false"
+        app:mwhProgress="1"
+        app:mwhStartColor="@color/colorPrimaryPartial"
+        app:mwhVelocity="1"
+        app:mwhWaveHeight="60dp"
+        app:mwhWaves="MultiWave">
+
+    </com.scwang.wave.MultiWaveHeader>
+
+    <TextView
+        android:id="@+id/edit_timeline_main_title"
+        style="@style/appHeaderStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/edit_new_lecture"
+        app:layout_constraintBottom_toBottomOf="@+id/edit_timeline_main_actionBar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.24000001" />
+
+
+    <TextView
+        android:id="@+id/edit_timeline_type_text"
+        style="@style/textHeaderStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/type"
+        android:textColor="@color/colorPrimaryPartial"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edit_timeline_main_actionBar" />
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/edit_timeline_tablayout"
+        android:layout_width="0dp"
+        android:layout_height="25dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:background="@android:color/transparent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edit_timeline_choice_type_chips"
+        app:tabBackground="@color/colorWhite"
+        app:tabGravity="center"
+        app:tabIndicator="@android:color/transparent"
+        app:tabMode="fixed"
+        app:tabRippleColor="@android:color/transparent"
+        app:tabSelectedTextColor="@color/colorPrimary"
+        app:tabTextColor="@color/colorPrimaryPartial">
+
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/monday" />
+
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/tuesday" />
+
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/wednesday" />
+
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/thursday" />
+
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/friday" />
+
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/saturday" />
+
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/sunday" />
+    </com.google.android.material.tabs.TabLayout>
+
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/edit_timeline_choice_type_chips"
+        style="@style/Widget.MaterialComponents.ChipGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:clickable="true"
+        app:checkedChip="@id/chip1"
+        app:layout_constraintStart_toStartOf="@+id/edit_timeline_type_text"
+        app:layout_constraintTop_toBottomOf="@+id/edit_timeline_type_text"
+        app:selectionRequired="true"
+        app:singleSelection="true">
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chip1"
+            style="@style/Widget.MaterialComponents.Chip.Choice"
+            android:layout_width="wrap_content"
+            android:layout_height="45dp"
+            android:checked="true"
+            android:text="@string/lecture"
+            android:textAllCaps="true" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chip2"
+            style="@style/Widget.MaterialComponents.Chip.Choice"
+            android:layout_width="wrap_content"
+            android:layout_height="45dp"
+            android:checked="false"
+            android:text="@string/exam"
+            android:textAllCaps="true" />
+
+
+    </com.google.android.material.chip.ChipGroup>
+
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/edit_timeline_viewpager"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edit_timeline_tablayout" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/edit_timeline_new_exam_recyclerview"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edit_timeline_tablayout" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

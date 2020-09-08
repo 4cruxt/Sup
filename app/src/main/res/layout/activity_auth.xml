@@ -111,166 +111,6 @@
         app:layout_constraintStart_toStartOf="@+id/c_auth_opt_title"
         app:layout_constraintTop_toBottomOf="@+id/c_auth_opt_title" />
 
-    <com.scwang.wave.MultiWaveHeader
-        android:id="@+id/c_auth_choice_bg"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginTop="24dp"
-        android:scaleY="-1"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/_otp_verifier_button"
-        app:mwhCloseColor="@color/colorPrimary"
-        app:mwhColorAlpha="0.8"
-        app:mwhIsRunning="false"
-        app:mwhProgress="1"
-        app:mwhStartColor="@color/colorPrimary"
-        app:mwhVelocity="1"
-        app:mwhWaveHeight="20dp"
-        app:mwhWaves="MultiWave">
-
-    </com.scwang.wave.MultiWaveHeader>
-
-    <TextView
-        android:id="@+id/c_auth_choice_course_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="24dp"
-        android:fontFamily="@font/aclonica"
-        android:text="@string/course"
-        android:textColor="@color/colorWhite"
-        android:textSize="18sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/c_auth_choice_bg" />
-
-    <com.google.android.material.chip.ChipGroup
-        android:id="@+id/c_auth_choice_course_chips"
-        style="@style/Widget.MaterialComponents.ChipGroup"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:checkedChip="@id/c_computer_science_chip"
-        app:layout_constraintStart_toStartOf="@+id/c_auth_choice_course_text"
-        app:layout_constraintTop_toBottomOf="@+id/c_auth_choice_course_text"
-        app:selectionRequired="true"
-        app:singleSelection="true">
-
-        <com.google.android.material.chip.Chip
-            android:id="@+id/c_computer_science_chip"
-            style="@style/Widget.MaterialComponents.Chip.Choice"
-            android:layout_width="wrap_content"
-            android:layout_height="45dp"
-            android:checked="true"
-            android:text="Computer Science"
-            app:chipSurfaceColor="@color/colorPrimaryPartial" />
-
-
-    </com.google.android.material.chip.ChipGroup>
-
-    <TextView
-        android:id="@+id/c_auth_choice_year_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:fontFamily="@font/aclonica"
-        android:text="Year"
-        android:textColor="@color/colorWhite"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/c_auth_choice_course_text"
-        app:layout_constraintTop_toBottomOf="@+id/c_auth_choice_course_chips" />
-
-    <com.google.android.material.chip.ChipGroup
-        android:id="@+id/c_auth_choice_year_chips"
-        style="@style/Widget.MaterialComponents.ChipGroup"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="@+id/c_auth_choice_year_text"
-        app:layout_constraintTop_toBottomOf="@+id/c_auth_choice_year_text"
-        app:selectionRequired="true"
-        app:singleSelection="true">
-
-        <com.google.android.material.chip.Chip
-            android:id="@+id/y_first_chip"
-            style="@style/Widget.MaterialComponents.Chip.Choice"
-            android:layout_width="wrap_content"
-            android:layout_height="45dp"
-            android:checked="true"
-            android:text="1st"
-            app:chipSurfaceColor="@color/colorPrimaryPartial" />
-
-    </com.google.android.material.chip.ChipGroup>
-
-    <TextView
-        android:id="@+id/c_auth_choice_uni_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:fontFamily="@font/aclonica"
-        android:text="University"
-        android:textColor="@color/colorWhite"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="@+id/c_auth_choice_course_text"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/c_auth_choice_course_text" />
-
-    <com.google.android.material.chip.ChipGroup
-        android:id="@+id/c_auth_choice_uni_chips"
-        style="@style/Widget.MaterialComponents.ChipGroup"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="@+id/c_auth_choice_uni_text"
-        app:layout_constraintStart_toStartOf="@+id/c_auth_choice_uni_text"
-        app:layout_constraintTop_toBottomOf="@+id/c_auth_choice_uni_text"
-        app:selectionRequired="true"
-        app:singleSelection="true">
-
-        <com.google.android.material.chip.Chip
-            android:id="@+id/uni_must_chip"
-            style="@style/Widget.MaterialComponents.Chip.Choice"
-            android:layout_width="wrap_content"
-            android:layout_height="45dp"
-            android:checked="true"
-            android:text="MUST"
-            android:textSize="14sp"
-            app:chipSurfaceColor="@color/colorPrimaryPartial" />
-
-    </com.google.android.material.chip.ChipGroup>
-
-    <com.google.android.material.chip.ChipGroup
-        android:id="@+id/c_auth_choice_region_chips"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:checkedChip="@id/reg_mbeya_chip"
-        app:layout_constraintEnd_toEndOf="@+id/c_auth_choice_region_text"
-        app:layout_constraintStart_toStartOf="@+id/c_auth_choice_region_text"
-        app:layout_constraintTop_toBottomOf="@+id/c_auth_choice_region_text"
-        app:selectionRequired="true"
-        app:singleSelection="true">
-
-        <com.google.android.material.chip.Chip
-            android:id="@+id/reg_mbeya_chip"
-            style="@style/Widget.MaterialComponents.Chip.Choice"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:checked="true"
-            android:text="Mbeya"
-            app:chipSurfaceColor="@color/colorPrimaryPartial" />
-    </com.google.android.material.chip.ChipGroup>
-
-    <TextView
-        android:id="@+id/c_auth_choice_region_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/aclonica"
-        android:text="Region"
-        android:textColor="@color/colorWhite"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="@+id/c_auth_choice_year_text"
-        app:layout_constraintEnd_toEndOf="@+id/c_auth_choice_uni_text"
-        app:layout_constraintStart_toStartOf="@+id/c_auth_choice_uni_text"
-        app:layout_constraintTop_toTopOf="@+id/c_auth_choice_year_text" />
 
     <Button
         android:id="@+id/c_auth_opt_new_user_button"
@@ -288,5 +128,68 @@
         app:layout_constraintStart_toStartOf="@+id/c_auth_opt_title"
         app:layout_constraintTop_toBottomOf="@+id/c_auth_opt_title"
         app:rippleColor="@color/colorPrimaryPartial" />
+
+    <com.chivorn.smartmaterialspinner.SmartMaterialSpinner
+        android:id="@+id/c_auth_university_spinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="24dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/_otp_verifier_button"
+        app:smsp_enableSearchHeader="false"
+        app:smsp_floatingLabelText="University"
+        app:smsp_hint="University/College"
+        app:smsp_hintColor="@color/colorPrimaryPartial"
+        app:smsp_isSearchable="true"
+        app:smsp_itemColor="@color/colorPrimaryDark"
+        app:smsp_itemListColor="@color/colorPrimaryPartial"
+        app:smsp_itemListHintBackgroundColor="@color/colorPrimaryDark"
+        app:smsp_itemListHintColor="@color/colorWhite"
+        app:smsp_selectedItemListColor="@color/colorPrimaryDark" />
+
+    <com.chivorn.smartmaterialspinner.SmartMaterialSpinner
+        android:id="@+id/c_auth_course_spinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="24dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/c_auth_university_spinner"
+        app:smsp_enableSearchHeader="false"
+        app:smsp_floatingLabelText="Course"
+        app:smsp_hint="Course name"
+        app:smsp_hintColor="@color/colorPrimaryPartial"
+        app:smsp_isSearchable="true"
+        app:smsp_itemColor="@color/colorPrimaryDark"
+        app:smsp_itemListColor="@color/colorPrimaryPartial"
+        app:smsp_itemListHintBackgroundColor="@color/colorPrimaryDark"
+        app:smsp_itemListHintColor="@color/colorWhite"
+        app:smsp_selectedItemListColor="@color/colorPrimaryDark" />
+
+    <com.chivorn.smartmaterialspinner.SmartMaterialSpinner
+        android:id="@+id/c_auth_year_spinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="24dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/c_auth_course_spinner"
+        app:smsp_enableSearchHeader="false"
+        app:smsp_floatingLabelText="Year"
+        app:smsp_hint="University year"
+        app:smsp_hintColor="@color/colorPrimaryPartial"
+        app:smsp_isSearchable="true"
+        app:smsp_itemColor="@color/colorPrimaryDark"
+        app:smsp_itemListColor="@color/colorPrimaryPartial"
+        app:smsp_itemListHintBackgroundColor="@color/colorPrimaryDark"
+        app:smsp_itemListHintColor="@color/colorWhite"
+        app:smsp_selectedItemListColor="@color/colorPrimaryDark" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Sup</string>
+    <string name="app_name">Supme</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_events">Events</string>
     <string name="title_profile">Profile</string>
@@ -9,10 +9,20 @@
     <string name="edit_profile">Edit profile</string>
     <string name="edit_new_assignment">New Assignment</string>
     <string name="edit_new_announcement">New Announcement</string>
+    <string name="edit_new_exam">New Exam</string>
+    <string name="edit_new_lecture">New Lecture</string>
+    <string name="monday">Mon</string>
+    <string name="tuesday">tue</string>
+    <string name="wednesday">Wed</string>
+    <string name="thursday">Thu</string>
+    <string name="friday">Fri</string>
+    <string name="saturday">Sat</string>
+    <string name="sunday">Sun</string>
     <string name="logout">Logout</string>
     <string name="about_me">About Me</string>
     <string name="featured_events">Featured Events</string>
-    <string name="exam">Exams</string>
+    <string name="exams">Exams</string>
+    <string name="exam">Exam</string>
     <string name="module">Modules</string>
     <string name="project">Projects</string>
     <string name="today_s_timeline">TODAY\'S TIMELINE</string>
@@ -32,4 +42,5 @@
     <string name="bio_placeholder">I\'m a software engineer who is passionate about making open-source more accessible, creating technology to elevate people, and building community. Some technologies I enjoy working with include Game dev.(Unity engine), Animation dev.(iClone) and Mobile dev.(Android).</string>
     <string name="course_placeholder">Computer Science</string>
     <string name="type">Type</string>
+    <string name="lecture">lecture</string>
 </resources>

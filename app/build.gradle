@@ -75,6 +75,7 @@ dependencies {
     implementation 'com.github.Shashank02051997:FancyToast-Android:0.1.6'
     implementation 'com.github.aabhasr1:OtpView:v1.1.2'
     implementation 'com.android.support:multidex:1.0.3'
+    implementation 'com.github.chivorns.androidx:smartmaterialspinner:1.2.1'
     implementation ("com.github.bumptech.glide:glide:4.11.0") {
         exclude group: "com.android.support"
     }

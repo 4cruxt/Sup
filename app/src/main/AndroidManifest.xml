@@ -12,7 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".editor.TimelineActivity"
+            android:name=".editor.TimelineEditActivity"
             android:theme="@style/EditorTheme" />
         <activity
             android:name=".editor.AssignAnnounceActivity"
